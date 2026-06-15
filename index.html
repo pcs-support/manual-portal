@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCS マニュアルポータル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0F1923;
+    --bg-card: #FFFFFF;
+    --bg-surface: #F0F4F8;
+    --accent: #1E9E75;
+    --accent-light: #E8F5F0;
+    --accent-dark: #0F6E56;
+    --text-primary: #0F1923;
+    --text-secondary: #4A5568;
+    --text-muted: #718096;
+    --border: #E2E8F0;
+    --badge-enclosed: #EBF4FF;
+    --badge-enclosed-text: #2B6CB0;
+    --badge-support: #E8F5F0;
+    --badge-support-text: #0F6E56;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans JP', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--bg);
+    padding: 0 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .header-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.2px;
+  }
+
+  .header-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    margin-left: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-wrap {
+    position: relative;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    stroke: rgba(255,255,255,0.4);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+
+  #search {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-family: 'Noto Sans JP', sans-serif;
+    padding: 7px 12px 7px 32px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  #search::placeholder { color: rgba(255,255,255,0.3); }
+  #search:focus { border-color: var(--accent); background: rgba(255,255,255,0.12); }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--bg);
+    padding: 52px 2rem 44px;
+    text-align: center;
+  }
+
+  .hero-inner { max-width: 600px; margin: 0 auto; }
+
+  .hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 28px;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+  }
+
+  /* ── Main ── */
+  main {
+    background: var(--bg-surface);
+    min-height: calc(100vh - 64px);
+    padding: 0 2rem 60px;
+  }
+
+  .main-inner { max-width: 1100px; margin: 0 auto; }
+
+  /* ── Category tabs ── */
+  .cat-bar {
+    display: flex;
+    gap: 8px;
+    padding: 24px 0 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .cat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-right: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .cat-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .cat-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .cat-btn .cnt {
+    background: rgba(0,0,0,0.1);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    line-height: 1.4;
+  }
+
+  .cat-btn.active .cnt { background: rgba(255,255,255,0.25); }
+
+  /* ── Section header ── */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-top: 8px;
+  }
+
+  .section-head h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .section-head .result-count {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.375rem;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.2s, transform 0.2s, opacity 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .card.hidden { display: none; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 100px;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+  }
+
+  .badge-enclosed {
+    background: var(--badge-enclosed);
+    color: var(--badge-enclosed-text);
+  }
+
+  .badge-support {
+    background: var(--badge-support);
+    color: var(--badge-support-text);
+  }
+
+  .card-ver {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    padding-top: 3px;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .icon-blue { background: #EBF4FF; }
+  .icon-blue svg { stroke: #2B6CB0; }
+  .icon-green { background: var(--badge-support); }
+  .icon-green svg { stroke: var(--accent-dark); }
+  .icon-amber { background: #FFFBEB; }
+  .icon-amber svg { stroke: #B7791F; }
+  .icon-purple { background: #F3F0FF; }
+  .icon-purple svg { stroke: #6B46C1; }
+  .icon-coral { background: #FFF5F5; }
+  .icon-coral svg { stroke: #C53030; }
+
+  .card-body { flex: 1; }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 2px;
+  }
+
+  .card-format {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .card-format svg {
+    width: 13px;
+    height: 13px;
+    stroke: var(--text-muted);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .btn-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--accent-dark);
+    background: var(--accent-light);
+    border: none;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+
+  .btn-view:hover { background: #C6EBE0; }
+
+  .btn-view svg {
+    width: 13px;
+    height: 13px;
+    stroke: var(--accent-dark);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Empty state ── */
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    display: none;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--bg);
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 26px; }
+    .hero-stats { gap: 20px; }
+    .header-title { font-size: 15px; }
+    #search { width: 140px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    </div>
+    <div>
+      <div class="header-title">PCS マニュアルポータル</div>
+      <div class="header-sub">Private Cloud Server</div>
+    </div>
+    <div class="header-right">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search" placeholder="マニュアルを検索…" autocomplete="off">
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>マニュアル<span>一覧</span></h1>
+    <p>設置・設定からサポート手順まで、必要なドキュメントをすぐに見つけられます。</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" id="total-count">7</div>
+        <div class="stat-label">マニュアル総数</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2</div>
+        <div class="stat-label">カテゴリー</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="main-inner">
+    <div class="cat-bar">
+      <span class="cat-label">カテゴリー</span>
+      <button class="cat-btn active" data-cat="all">
+        すべて <span class="cnt" id="cnt-all">7</span>
+      </button>
+      <button class="cat-btn" data-cat="同封マニュアル">
+        同封マニュアル <span class="cnt" id="cnt-enclosed">2</span>
+      </button>
+      <button class="cat-btn" data-cat="PCSサポート用マニュアル">
+        PCSサポート用マニュアル <span class="cnt" id="cnt-support">5</span>
+      </button>
+    </div>
+
+    <div class="section-head">
+      <h2 id="section-label">すべてのマニュアル</h2>
+      <span class="result-count" id="result-count">7件</span>
+    </div>
+
+    <div class="grid" id="grid">
+
+      <!-- 同封マニュアル 1 -->
+      <div class="card" data-cat="同封マニュアル" data-title="設置時にやること スタンダード M5">
+        <div class="card-top">
+          <span class="badge badge-enclosed">同封マニュアル</span>
+          <span class="card-ver">Ver.20240502</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-blue">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">設置時にやること（スタンダード M5）</div>
+            <div class="card-desc">サーバーの設置・初期設定、共有フォルダアクセス、PCバックアップ、VPN設定、再起動・シャットダウン方法</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            PDF
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 同封マニュアル 2 -->
+      <div class="card" data-cat="同封マニュアル" data-title="M5 ファイル共有マニュアル">
+        <div class="card-top">
+          <span class="badge badge-enclosed">同封マニュアル</span>
+          <span class="card-ver">Ver.20240214</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-blue">
+            <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">M5 ファイル共有マニュアル</div>
+            <div class="card-desc">共有フォルダの作成・削除、アクセス権限設定、ユーザー作成・削除、共有フォルダへのアクセス方法</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            PDF
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- PCSサポート 1 -->
+      <div class="card" data-cat="PCSサポート用マニュアル" data-title="LAN2本差しと設定変更方法">
+        <div class="card-top">
+          <span class="badge badge-support">PCSサポート用マニュアル</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-green">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">LAN2本差しと設定変更方法</div>
+            <div class="card-desc">VPN越しの速度改善のためLANケーブルを2本接続する手順とSoftEther VPNサーバー管理マネージャーのセットアップ</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Word
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- PCSサポート 2 -->
+      <div class="card" data-cat="PCSサポート用マニュアル" data-title="M3世代バックアップからの復元方法">
+        <div class="card-top">
+          <span class="badge badge-support">PCSサポート用マニュアル</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-amber">
+            <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">M3世代バックアップからの復元方法</div>
+            <div class="card-desc">PCS設定画面の世代バックアップ復元ツールを使ったフォルダ単位の復元手順（第3階層まで対応）</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Word
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- PCSサポート 3 -->
+      <div class="card" data-cat="PCSサポート用マニュアル" data-title="M5世代バックアップからの復元方法">
+        <div class="card-top">
+          <span class="badge badge-support">PCSサポート用マニュアル</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-amber">
+            <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">M5世代バックアップからの復元方法</div>
+            <div class="card-desc">ホストIP:8080のリストア画面から日付・フォルダを選択してファイルを復元する手順</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Word
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- PCSサポート 4 -->
+      <div class="card" data-cat="PCSサポート用マニュアル" data-title="VPN設定 共有フォルダ外部接続">
+        <div class="card-top">
+          <span class="badge badge-support">PCSサポート用マニュアル</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-purple">
+            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">VPN設定（共有フォルダ外部接続）</div>
+            <div class="card-desc">SoftEther VPN ClientのダウンロードからVPN接続設定・仮想LANカード作成までの手順（Windows向け簡易版）</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Word
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- PCSサポート 5 -->
+      <div class="card" data-cat="PCSサポート用マニュアル" data-title="共有フォルダアクセス方法">
+        <div class="card-top">
+          <span class="badge badge-support">PCSサポート用マニュアル</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div class="card-icon icon-green">
+            <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">共有フォルダアクセス方法</div>
+            <div class="card-desc">エクスプローラーからサーバーアドレスを入力して共有フォルダにアクセスする手順とデフォルト資格情報の案内</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-format">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Word
+          </span>
+          <a class="btn-view" href="#" onclick="return false;">
+            閲覧する
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="empty" id="empty">該当するマニュアルが見つかりません</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  © PCS マニュアルポータル — Private Cloud Server
+</footer>
+
+<script>
+const cards = Array.from(document.querySelectorAll('.card[data-cat]'));
+const emptyEl = document.getElementById('empty');
+const resultCount = document.getElementById('result-count');
+const sectionLabel = document.getElementById('section-label');
+const searchEl = document.getElementById('search');
+const totalCount = document.getElementById('total-count');
+
+let currentCat = 'all';
+let searchQuery = '';
+
+function filterCards() {
+  let visible = 0;
+  cards.forEach(card => {
+    const catMatch = currentCat === 'all' || card.dataset.cat === currentCat;
+    const title = card.dataset.title.toLowerCase();
+    const descEl = card.querySelector('.card-desc');
+    const desc = descEl ? descEl.textContent.toLowerCase() : '';
+    const q = searchQuery.toLowerCase();
+    const searchMatch = !q || title.includes(q) || desc.includes(q);
+
+    if (catMatch && searchMatch) {
+      card.classList.remove('hidden');
+      visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  emptyEl.style.display = visible === 0 ? 'block' : 'none';
+  resultCount.textContent = visible + '件';
+  totalCount.textContent = visible;
+
+  if (currentCat === 'all') {
+    sectionLabel.textContent = searchQuery ? '検索結果' : 'すべてのマニュアル';
+  } else {
+    sectionLabel.textContent = currentCat;
+  }
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCat = btn.dataset.cat;
+    filterCards();
+  });
+});
+
+searchEl.addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  filterCards();
+});
+</script>
+</body>
+</html>
